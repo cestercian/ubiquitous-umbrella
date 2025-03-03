@@ -1,5 +1,5 @@
 type Pizza = {
-    id:number,
+    id?:number,
     name:string,
     price:number,
 }
@@ -27,8 +27,8 @@ function addNewPizza(pizzaObj: Omit<Pizza,"id">): Pizza {
     const newPizza : Pizza= {id: nextPizzaId++,...pizzaObj,}
     menu.push(newPizza)
     return newPizza
-
 }
+
 
 function placeOrder(pizzaName: string) : Order {
     const selectedPizza = menu.find(pizzaObj => pizzaObj.name === pizzaName)
@@ -38,10 +38,20 @@ function placeOrder(pizzaName: string) : Order {
     cashInRegister += selectedPizza.price
     const newOrder: Order = { id: nextOrderId++, pizza: selectedPizza, status: "ordered" }
     orderQueue.push(newOrder)
+    cashInRegister += selectedPizza.price
     return newOrder
 }
 
-function completeOrder(orderId: number) :Order {
+
+function addToArray<T>(array:T[], item:T):T[] {
+    array.push(item)
+    return array
+}
+
+addToArray(menu, {id: nextPizzaId++, name: "Chicken Bacon Ranch", price: 12 })
+addToArray(orderQueue, { id: nextOrderId++, pizza: menu[2], status: "completed" })
+
+function completeOrder(orderId: number): Order | undefined {
     const order = orderQueue.find(order => order.id === orderId)
     if (!order) {
         console.error(`${orderId} was not found in the orderQueue`)
@@ -52,15 +62,11 @@ function completeOrder(orderId: number) :Order {
     return order
 }
 
-export function getPizzaDetail(identifier: string | number): Pizza | undefined {
+function getPizzaDetail(identifier: string | number): Pizza | undefined {
     if (typeof identifier === "string") {
         return menu.find(pizza => pizza.name.toLowerCase() === identifier.toLowerCase())
-    } else { // noinspection SuspiciousTypeOfGuard
-        if (typeof identifier === "number") {
-                return menu.find(pizza => pizza.id === identifier)
-            } else {
-                throw new TypeError("Parameter `identifier` must be either a string or a number")
-            }
+    } else {
+        return menu.find(pizza => pizza.id === identifier)
     }
 }
 

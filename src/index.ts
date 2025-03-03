@@ -23,9 +23,11 @@ const menu: Pizza[] = [
 
 const orderQueue: Order[] = [];
 
-function addNewPizza(pizzaObj: Omit<Pizza,"id">): void {
-    const pizza = {id: nextPizzaId++,...pizzaObj,}
-    menu.push(pizza)
+function addNewPizza(pizzaObj: Omit<Pizza,"id">): Pizza {
+    const newPizza : Pizza= {id: nextPizzaId++,...pizzaObj,}
+    menu.push(newPizza)
+    return newPizza
+
 }
 
 function placeOrder(pizzaName: string) : Order {

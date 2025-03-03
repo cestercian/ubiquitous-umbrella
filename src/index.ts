@@ -49,7 +49,7 @@ function addToArray<T>(array:T[], item:T):T[] {
 }
 
 addToArray(menu, {id: nextPizzaId++, name: "Chicken Bacon Ranch", price: 12 })
-addToArray(orderQueue, { id: nextOrderId++, pizza: menu[2], status: "completed" })
+addToArray<Order>(orderQueue, { id: nextOrderId++, pizza: menu[2], status: "completed" })
 
 function completeOrder(orderId: number): Order | undefined {
     const order = orderQueue.find(order => order.id === orderId)
